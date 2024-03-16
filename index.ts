@@ -1,12 +1,17 @@
-import express from 'express'
-const PORT = 8000
+import "dotenv/config";
+import express from "express";
 
-const app = express()
+import { runDatabaseConnection } from "./connectMongoDB";
 
-app.get('/', (req, res) => {
-  res.send('Hello from Express my bro')
-})
+const PORT = 8000;
+const app = express();
+
+runDatabaseConnection().catch(console.error);
+
+app.get("/", (req, res) => {
+    res.send("Hello from Express my bro");
+});
 
 app.listen(PORT, () => {
-  console.log(`Now listening on PORT: ${PORT}`)
-})
+    console.log(`Now listening on PORT: ${PORT}`);
+});
