@@ -1,7 +1,7 @@
 import "dotenv/config";
 import express from "express";
 
-import { runDatabaseConnection } from "./src/config/connectMongoDB";
+import { runDatabaseConnection } from "./config/connectMongoDB";
 
 const PORT = 8000;
 const app = express();
