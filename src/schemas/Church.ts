@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document } from "mongoose";
 
-interface IChurch extends Document {
+export interface IChurch extends Document {
     name: string;
     address: string;
     phone: string;

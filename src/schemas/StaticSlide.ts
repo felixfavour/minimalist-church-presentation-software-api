@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document } from "mongoose";
 
-interface IStaticSlide extends Document {
+export interface IStaticSlide extends Document {
     content: string;
     churchId: mongoose.Types.ObjectId;
 }

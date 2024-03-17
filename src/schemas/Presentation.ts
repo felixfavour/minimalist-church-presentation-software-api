@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document } from "mongoose";
 
-interface IPresentation extends Document {
+export interface IPresentation extends Document {
     title: string;
     date: Date;
     slides: mongoose.Types.ObjectId[];

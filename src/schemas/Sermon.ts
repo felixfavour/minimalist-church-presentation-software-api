@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document } from "mongoose";
 
-interface ISermon extends Document {
+export interface ISermon extends Document {
     title: string;
     date: Date;
     content: string;
