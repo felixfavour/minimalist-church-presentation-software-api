@@ -10,7 +10,7 @@ export interface IPresentation extends Document {
 const presentationSchema: Schema = new Schema({
     title: { type: String, required: true },
     date: { type: Date, required: true },
-    slides: [{ type: mongoose.Schema.Types.ObjectId, ref: "StaticSlide" }],
+    slides: [{ type: mongoose.Schema.Types.ObjectId, ref: "Slide" }],
     churchId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Church",

@@ -1,11 +1,11 @@
 import mongoose, { Schema, Document } from "mongoose";
 
-export interface IStaticSlide extends Document {
+export interface ISlide extends Document {
     content: string;
     churchId: mongoose.Types.ObjectId;
 }
 
-const staticSlideSchema: Schema = new Schema({
+const slideSchema: Schema = new Schema({
     content: { type: String, required: true },
     churchId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -14,4 +14,4 @@ const staticSlideSchema: Schema = new Schema({
     },
 });
 
-export default mongoose.model<IStaticSlide>("StaticSlide", staticSlideSchema);
+export default mongoose.model<ISlide>("Slide", slideSchema);
