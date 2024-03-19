@@ -7,9 +7,19 @@ export interface IChurch extends Document {
     email: string;
 }
 
+const eventSchema: Schema = new Schema({
+    day: String,
+    time: String,
+    description: String,
+});
+
 const churchSchema: Schema = new Schema({
     name: { type: String, required: true },
+    description: { type: String, required: false },
+    pastor: { type: String, required: false },
     address: { type: String, required: true },
+    schedule: [eventSchema],
+    timezone: { type: String, required: false },
     phone: { type: String, required: true },
     email: { type: String, required: true },
 });
