@@ -1,4 +1,6 @@
 import { slideRepository } from "../repositories/slide-repository";
+import { presentationRepository } from "../repositories/presentation-repository";
+
 import { ISlide } from "../schemas/Slide";
 
 async function addSlide(slideData: ISlide): Promise<ISlide> {
@@ -40,19 +42,9 @@ async function updateSlide(id: number, slideData: ISlide) {
     }
 }
 
-async function removeSlide(id: number) {
-    try {
-        const slide = await slideRepository.delete(id);
-        return slide;
-    } catch (error) {
-        throw new Error("Error removing slide");
-    }
-}
-
 export default {
     addSlide,
     getAllSlidees,
     getSlideById,
     updateSlide,
-    removeSlide,
 };

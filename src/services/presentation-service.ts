@@ -1,5 +1,7 @@
 import { presentationRepository } from "../repositories/presentation-repository";
+import { slideRepository } from "../repositories/slide-repository";
 import { IPresentation } from "../schemas/Presentation";
+import { ISlide } from "../schemas/Slide";
 
 async function addPresentation(
     presentationData: IPresentation
@@ -47,12 +49,47 @@ async function updatePresentation(id: number, presentationData: IPresentation) {
     }
 }
 
-async function removePresentation(id: number) {
+async function removePresentation(id: number): Promise<void> {
     try {
-        const presentation = await presentationRepository.delete(id);
-        return presentation;
+        await slideRepository.deleteMany(id);
+        await presentationRepository.delete(id);
     } catch (error) {
         throw new Error("Error removing presentation");
+    }
+}
+
+async function addSlide(presentationId: number, slideData: ISlide) {
+    try {
+        const newSlide = await slideRepository.create(slideData);
+        const updatedPresentation =
+            await presentationRepository.addSlideToPresentation(
+                presentationId,
+                newSlide._id
+            );
+        return updatedPresentation;
+    } catch (error) {
+        throw new Error(`Error adding slide to presentation`);
+    }
+}
+
+async function removeSlide(presentationId: number, slideId: number) {
+    try {
+        const updatedPresentation = await presentationRepository.removeSlide(
+            presentationId,
+            slideId
+        );
+
+        await slideRepository.delete(slideId);
+
+        if (!updatedPresentation) {
+            throw new Error(
+                "Presentation not found or slide not part of the presentation"
+            );
+        }
+
+        return updatedPresentation;
+    } catch (error) {
+        throw new Error(`Error removing slide`);
     }
 }
 
@@ -62,4 +99,6 @@ export default {
     getPresentationById,
     updatePresentation,
     removePresentation,
+    addSlide,
+    removeSlide,
 };

@@ -26,8 +26,11 @@ class SlideRepository {
         return Slide.findByIdAndDelete(id);
     }
 
-    async findByChurchId(churchId: mongoose.Types.ObjectId): Promise<ISlide[]> {
-        return Slide.find({ churchId: churchId });
+    async deleteMany(presentationId: number): Promise<number> {
+        const result = await Slide.deleteMany({
+            presentationId: presentationId,
+        });
+        return result.deletedCount;
     }
 }
 

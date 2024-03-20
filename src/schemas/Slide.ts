@@ -7,9 +7,9 @@ export interface ISlide extends Document {
 
 const slideSchema: Schema = new Schema({
     content: { type: String, required: true },
-    churchId: {
+    presentationId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Church",
+        ref: "Presentation",
         required: true,
     },
 });
