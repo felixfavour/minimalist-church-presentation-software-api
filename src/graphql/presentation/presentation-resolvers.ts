@@ -1,4 +1,5 @@
 import Presentation from "../../models/Presentation";
+import Slide from "../../models/Slide";
 
 interface PresentationInput {
     title: string;
@@ -7,29 +8,42 @@ interface PresentationInput {
 export const presentationResolvers = {
     Query: {
         async getPresentation(_: any, { id }: { id: string }) {
-            return await Presentation.findById(id);
+            return await Presentation.findById(id).populate("slides");
         },
+
         async getPresentations(_: any) {
-            return await Presentation.find();
+            return await Presentation.find().populate("slides");
         },
     },
+
     Mutation: {
         async createPresentation(
             _: any,
             { presentationInput }: { presentationInput: PresentationInput }
         ) {
             const newPresentation = new Presentation({
-                title: presentationInput.title,
+                ...presentationInput,
             });
-            const res = await newPresentation.save();
-            return res;
+            const savedPresentation = await newPresentation.save();
+
+            const defaultSlide = new Slide({
+                name: "Welcome!",
+                type: "Title Slide",
+                layout: "Standard",
+                contents: ["This is your first slide!"],
+                presentationId: savedPresentation._id,
+            });
+            await defaultSlide.save();
+
+            await Presentation.findByIdAndUpdate(savedPresentation._id, {
+                $push: { slides: defaultSlide._id },
+            });
+
+            return Presentation.findById(savedPresentation._id).populate(
+                "slides"
+            );
         },
 
-        async deletePresentation(_: any, { id }: { id: string }) {
-            const wasDeleted = (await Presentation.deleteOne({ _id: id }))
-                .deletedCount;
-            return wasDeleted;
-        },
         async editPresentation(
             _: any,
             {
@@ -46,6 +60,12 @@ export const presentationResolvers = {
                 )
             ).modifiedCount;
             return wasEdited;
+        },
+
+        async deletePresentation(_: any, { id }: { id: string }) {
+            const wasDeleted = (await Presentation.deleteOne({ _id: id }))
+                .deletedCount;
+            return wasDeleted;
         },
     },
 };
