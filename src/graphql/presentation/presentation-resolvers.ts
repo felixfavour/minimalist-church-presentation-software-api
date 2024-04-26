@@ -1,7 +1,7 @@
 import Presentation from "../../models/Presentation";
 import Slide from "../../models/Slide";
 
-interface PresentationInput {
+interface IPresentationInput {
     title: string;
 }
 
@@ -19,7 +19,7 @@ export const presentationResolvers = {
     Mutation: {
         async createPresentation(
             _: any,
-            { presentationInput }: { presentationInput: PresentationInput }
+            { presentationInput }: { presentationInput: IPresentationInput }
         ) {
             const newPresentation = new Presentation({
                 ...presentationInput,
@@ -49,7 +49,7 @@ export const presentationResolvers = {
             {
                 id,
                 presentationInput,
-            }: { id: string; presentationInput: PresentationInput }
+            }: { id: string; presentationInput: IPresentationInput }
         ) {
             const wasEdited = (
                 await Presentation.updateOne(

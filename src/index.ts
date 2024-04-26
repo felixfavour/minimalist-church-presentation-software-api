@@ -7,7 +7,8 @@ import resolvers from "./graphql/resolvers";
 
 dotenv.config();
 
-const uri = process.env.MONGO_DB_URI!;
+export const uri = process.env.MONGO_DB_URI!;
+export const jwt_secret = process.env.JWT_SECRET!;
 
 const server = new ApolloServer({
     typeDefs,
