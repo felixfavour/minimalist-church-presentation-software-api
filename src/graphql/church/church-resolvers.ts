@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import Church from "../../models/Church";
 import { IChurch } from "../../models/Church";
 
-import { jwt_secret } from "../..";
+import { jwtSecret } from "../..";
 
 export const churchResolvers = {
     Query: {
@@ -30,7 +30,10 @@ export const churchResolvers = {
                 pastor,
             });
             await newChurch.save();
-            return newChurch;
+            const token = jwt.sign({ id: newChurch.id }, jwtSecret, {
+                expiresIn: "2h",
+            });
+            return { church: newChurch, token };
         },
 
         login: async (
@@ -46,7 +49,7 @@ export const churchResolvers = {
                 throw new Error("Invalid credentials");
             }
 
-            const token = jwt.sign({ id: church.id }, jwt_secret, {
+            const token = jwt.sign({ id: church.id }, jwtSecret, {
                 expiresIn: "2h",
             });
             return token;

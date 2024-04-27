@@ -7,6 +7,7 @@ export interface IChurch extends Document {
     email: string;
     password: string;
     pastor: string;
+    presentations: mongoose.Types.ObjectId[];
 }
 
 const churchSchema = new Schema({
@@ -16,6 +17,7 @@ const churchSchema = new Schema({
     email: { type: String, required: true },
     password: { type: String, required: true },
     pastor: { type: String, required: true },
+    presentations: [{ type: Schema.Types.ObjectId, ref: "Presentation" }],
 });
 
 export default model<IChurch>("Church", churchSchema);

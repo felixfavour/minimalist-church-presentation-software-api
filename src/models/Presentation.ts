@@ -3,6 +3,7 @@ import mongoose, { Schema, model, Document } from "mongoose";
 export interface IPresentation extends Document {
     title: string;
     slides: mongoose.Types.ObjectId[];
+    church: mongoose.Types.ObjectId;
     createdAt: Date;
 }
 
@@ -10,6 +11,7 @@ const presentationSchema: Schema = new Schema(
     {
         title: { type: String, required: true },
         slides: [{ type: Schema.Types.ObjectId, ref: "Slide" }],
+        church: { type: Schema.Types.ObjectId, ref: "Church", required: true },
     },
     {
         timestamps: true,
