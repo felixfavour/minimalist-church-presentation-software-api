@@ -3,7 +3,7 @@ import express from "express";
 
 import { runDatabaseConnection } from "./config/connectMongoDB";
 
-const PORT = 8000;
+const PORT = process.env.PORT || 8000;
 const app = express();
 
 runDatabaseConnection().catch(console.error);
