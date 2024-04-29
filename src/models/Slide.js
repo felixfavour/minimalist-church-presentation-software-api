@@ -8,7 +8,7 @@ const SlideSchema = new mongoose.Schema({
     backgroundType: String,
     background: String,
     presentationId: {
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "Presentation",
         required: true,
     },
