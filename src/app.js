@@ -7,7 +7,7 @@ import { protect } from "./middlewares/auth.js";
 
 import song from "./routes/song.js";
 import auth from "./routes/auth.js";
-import presentation from "./routes/presentation.js";
+import slide from "./routes/slide.js";
 
 const app = express();
 
@@ -28,6 +28,6 @@ app.use("/api/v1/auth", auth);
 // Song-temp routes
 app.use("/api/v1/songs", protect, song);
 
-app.use("/api/v1/presentations", protect, presentation);
+app.use("/api/v1/slides", slide);
 
 export default app;

@@ -7,7 +7,7 @@ const ChurchSchema = new mongoose.Schema({
     email: { type: String, required: true },
     password: { type: String, required: true },
     pastor: { type: String, required: true },
-    presentations: [{ type: mongoose.Schema.Types.ObjectId, ref: "Presentation" }],
+    slides: [{ type: mongoose.Schema.Types.ObjectId, ref: "Slide" }],
 });
 
-export const Church = mongoose.model("church", ChurchSchema);
+export const Church = mongoose.model("Church", ChurchSchema);
