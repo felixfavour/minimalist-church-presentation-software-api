@@ -11,11 +11,9 @@ const ChurchSchema = new mongoose.Schema({
     },
     address: {
         type: String,
-        required: true,
     },
     email: {
         type: String,
-        required: true,
     },
     pastor: {
         type: String,
