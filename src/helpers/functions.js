@@ -1,9 +1,6 @@
 import { customAlphabet } from "nanoid";
-import sendgridMail from "@sendgrid/mail";
 import bcrypt from "bcrypt";
 import crypto from "crypto";
-// import AWS from 'aws-sdk'
-import { ANONYMOUS_ALIASES, BAD_WORDS, months } from "./constants.js";
 
 let mostRecentColour = null;
 let mostRecentAlias = null;
