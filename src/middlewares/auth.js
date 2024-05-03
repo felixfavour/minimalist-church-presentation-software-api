@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { Church } from "../models/Church.js";
+import { User } from "../models/User.js";
 
 export const protect = async (req, res, next) => {
     let token;
@@ -10,7 +10,7 @@ export const protect = async (req, res, next) => {
 
             const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-            req.church = await Church.findById(decoded.id).select("-password");
+            req.user = await User.findById(decoded.id).select("-password");
 
             next();
         } catch (error) {

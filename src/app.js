@@ -5,8 +5,9 @@ import logRequests from "./middlewares/logger.js";
 
 import { protect } from "./middlewares/auth.js";
 
-import song from "./routes/song.js";
 import auth from "./routes/auth.js";
+import church from "./routes/church.js";
+import song from "./routes/song.js";
 import slide from "./routes/slide.js";
 
 const app = express();
@@ -25,9 +26,10 @@ app.use(urlencoded({ extended: true }));
 
 app.use("/api/v1/auth", auth);
 
-// Song-temp routes
+app.use("/api/v1/churches", protect, church);
+
 app.use("/api/v1/songs", protect, song);
 
-app.use("/api/v1/slides", slide);
+app.use("/api/v1/slides", protect, slide);
 
 export default app;

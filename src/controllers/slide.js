@@ -1,32 +1,35 @@
 import mongoose from "mongoose";
 import { Slide } from "../models/Slide.js";
+import { Church } from "../models/Church.js";
 
 export const getSlidesByChurch = async (req, res) => {
     try {
-        const slides = await Slide.find({ church: req.params.churchId }).populate("church");
+        const { churchId } = req.params;
+        const slides = await Slide.find({ churchId });
+
         res.status(200).json(slides);
     } catch (error) {
         res.status(500).json({ message: "Error fetching slides", error: error.message });
     }
 };
 
-export const addSlide = async (req, res) => {
+export const createSlide = async (req, res) => {
     try {
-        const { name, type, layout, church } = req.body;
+        const { churchId } = req.params;
+        const { name, type, layout } = req.body;
         const newSlide = await Slide.create({
-            church,
+            churchId,
             name,
             type,
             layout,
-            contents: [],
-            backgroundType: "",
-            background: "",
-            title: "",
-            songId: "",
-            hasChorus: false,
-            data: {},
-            slideStyle: { blur: 0, brightness: 0, alignment: "", font: "" },
         });
+
+        if (churchId) {
+            await Church.findByIdAndUpdate(churchId, {
+                $push: { slideIds: newSlide._id },
+            });
+        }
+
         res.status(201).json(newSlide);
     } catch (error) {
         res.status(500).json({ message: "Error creating slide", error: error.message });
