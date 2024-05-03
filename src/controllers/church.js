@@ -13,7 +13,6 @@ export const createChurch = async (req, res) => {
             address,
             email,
             pastor,
-            userIds: [userId],
         });
 
         await User.findByIdAndUpdate(userId, {

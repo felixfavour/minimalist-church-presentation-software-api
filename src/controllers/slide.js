@@ -24,12 +24,6 @@ export const createSlide = async (req, res) => {
             layout,
         });
 
-        if (churchId) {
-            await Church.findByIdAndUpdate(churchId, {
-                $push: { slideIds: newSlide._id },
-            });
-        }
-
         res.status(201).json(newSlide);
     } catch (error) {
         res.status(500).json({ message: "Error creating slide", error: error.message });
