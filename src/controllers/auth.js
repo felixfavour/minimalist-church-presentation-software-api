@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 
 import { User } from "../models/User.js";
 
-const signToken = id => jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "1hr" });
+const signToken = id => jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "60d" });
 
 export const signup = async (req, res) => {
     try {
