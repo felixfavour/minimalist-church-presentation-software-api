@@ -26,10 +26,10 @@ app.use(urlencoded({ extended: true }));
 
 app.use("/api/v1/auth", auth);
 
-app.use("/api/v1/churches", protect, church);
+app.use("/api/v1/church", protect, church);
 
-app.use("/api/v1/songs", protect, song);
+app.use("/api/v1/song", protect, song);
 
-app.use("/api/v1/slides", protect, slide);
+app.use("/api/v1/slide", protect, slide);
 
 export default app;
