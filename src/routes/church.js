@@ -1,10 +1,17 @@
 import express from "express";
-import { createChurch } from "../controllers/church.js";
-import { createSlide, deleteSlide, getSlidesByChurch, updateSlide } from "../controllers/slide.js";
+import { createChurch, getChurch } from "../controllers/church.js";
+import {
+  createSlide,
+  deleteSlide,
+  getSlidesByChurch,
+  updateSlide,
+} from "../controllers/slide.js";
 
 const router = express.Router();
 
 router.post("/", createChurch);
+
+router.get("/:churchId", getChurch);
 
 router.post("/:churchId/slides", createSlide);
 
