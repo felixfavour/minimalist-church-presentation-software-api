@@ -59,3 +59,44 @@ export const deleteSlide = async (req, res) => {
         res.status(500).json({ message: "Error deleting slide", error: error.message });
     }
 };
+
+export const batchCreateSlides = async (req, res) => {
+    try {
+        const { churchId } = req.params;
+        const slidesData = req.body;
+
+        if (!Array.isArray(slidesData) || slidesData.length === 0) {
+            return res.status(400).send("Invalid data provided.");
+        }
+
+        const slidesWithChurchId = slidesData.map(data => ({ ...data, churchId }));
+
+        const createdSlides = await Slide.insertMany(slidesWithChurchId, { validate: true });
+
+        res.status(201).json(createdSlides);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+export const batchDeleteSlides = async (req, res) => {
+    try {
+        const slideIds = req.body;
+
+        if (!Array.isArray(slideIds) || slideIds.length === 0) {
+            return res.status(400).send("Invalid data provided.");
+        }
+
+        const deleteResult = await Slide.deleteMany({
+            _id: { $in: slideIds },
+        });
+
+        if (deleteResult.deletedCount === 0) {
+            return res.status(404).send("No slides found to delete.");
+        }
+
+        res.status(200).send(`Successfully deleted ${deleteResult.deletedCount} slides.`);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
