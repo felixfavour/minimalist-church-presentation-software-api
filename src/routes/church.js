@@ -1,6 +1,13 @@
 import express from "express";
 import { createChurch, getChurch } from "../controllers/church.js";
-import { batchDeleteSlides, createSlide, deleteSlide, getSlidesByChurch, updateSlide } from "../controllers/slide.js";
+import {
+    batchDeleteSlides,
+    batchCreateSlides,
+    createSlide,
+    deleteSlide,
+    getSlidesByChurch,
+    updateSlide,
+} from "../controllers/slide.js";
 
 const router = express.Router();
 
