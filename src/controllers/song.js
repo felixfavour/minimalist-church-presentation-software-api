@@ -39,5 +39,14 @@ export const getSongs = async (req, res) => {
 
 export const addSong = async (req, res) => {
     try {
-    } catch {}
+        const { title, artist, lyrics } = req.body;
+        const newSong = await Song.create({
+            title,
+            artist,
+            lyrics,
+        });
+        res.status(201).json(newSong);
+    } catch (error) {
+        res.status(500).json({ message: "Error creating song", error: error.message });
+    }
 };
