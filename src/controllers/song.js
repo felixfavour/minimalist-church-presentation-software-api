@@ -5,17 +5,22 @@ import { Song } from "../models/Song.js";
 
 export const getSongs = async (req, res) => {
     try {
-        console.log("gello");
         let songs = [];
         if (req.query.search) {
             songs = await Song.aggregate([
                 {
+                    // $match: {
+                    //     $or: [
+                    //         { title: { $regex: req.query.search, $options: "i" } },
+                    //         { artist: { $regex: req.query.search, $options: "i" } },
+                    //     ],
+                    // },
                     $match: {
-                        $or: [
-                            { title: { $regex: req.query.search, $options: "i" } },
-                            { artist: { $regex: req.query.search, $options: "i" } },
-                        ],
+                        $text: { $search: req.query.search },
                     },
+                },
+                {
+                    $sort: { score: { $meta: "textScore" } }, // Sorting by relevance
                 },
                 {
                     $limit: 20,
@@ -30,4 +35,9 @@ export const getSongs = async (req, res) => {
         console.error(`GET SONG ERROR: ${err}`);
         res.status(400).json(errorMsg(err));
     }
+};
+
+export const addSong = async (req, res) => {
+    try {
+    } catch {}
 };
