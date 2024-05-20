@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 
+import { Song } from "../models/Song.js";
+
 // Require environmental variables
 dotenv.config();
 
@@ -10,6 +12,11 @@ export const connectDB = async () => {
         await mongoose.connect(
             `${process.env.DB_HOST}://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_CONNECTOR}`,
         );
+
+        Song.createIndexes()
+            .then(() => console.log("Indexes ensured"))
+            .catch(err => console.error("Error creating indexes:", err));
+
         console.log("DB Connection Successful");
     } catch (err) {
         console.error(`DB Connection failed: ${err}`);
