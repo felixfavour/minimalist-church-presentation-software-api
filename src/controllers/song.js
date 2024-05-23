@@ -39,11 +39,15 @@ export const getSongs = async (req, res) => {
 
 export const addSong = async (req, res) => {
     try {
-        const { title, artist, lyrics } = req.body;
+        const userId = req.user._id;
+
+        const { title, artist, lyrics, isPublic } = req.body;
         const newSong = await Song.create({
             title,
             artist,
             lyrics,
+            isPublic,
+            createdBy: userId,
         });
         res.status(201).json(newSong);
     } catch (error) {
