@@ -8,7 +8,7 @@ import {
     getSlidesByChurch,
     updateSlide,
 } from "../controllers/slide.js";
-import { addSong, getSongsByChurch } from "../controllers/song.js";
+import { addSong, getSongsByChurch, updateSong, deleteSong } from "../controllers/song.js";
 
 const router = express.Router();
 
@@ -28,7 +28,11 @@ router.get("/:churchId/songs", getSongsByChurch);
 
 router.put("/:churchId/slides/:slideId", updateSlide);
 
+router.put("/:churchId/songs/:songId", updateSong);
+
 router.delete("/:churchId/slides/:slideId", deleteSlide);
+
+router.delete("/:churchId/songs/:songId", deleteSong);
 
 router.delete("/:churchId/slides/batch", batchDeleteSlides);
 

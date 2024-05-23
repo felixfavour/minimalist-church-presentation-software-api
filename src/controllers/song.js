@@ -75,3 +75,41 @@ export const addSong = async (req, res) => {
         res.status(500).json({ message: "Error creating song", error: error.message });
     }
 };
+
+export const updateSong = async (req, res) => {
+    const { songId } = req.params;
+    const songData = req.body;
+
+    try {
+        const updatedSong = await Song.findByIdAndUpdate(
+            songId,
+            { $set: songData },
+            { new: true, runValidators: true },
+        );
+
+        if (!updatedSong) {
+            return res.status(404).json({ message: "Song not found" });
+        }
+
+        res.status(200).json(updatedSong);
+    } catch (error) {
+        res.status(500).json({ message: "Failed to update song", error: error.message });
+    }
+};
+
+export const deleteSong = async (req, res) => {
+    try {
+        const { songId } = req.params;
+
+        const deletedSong = await Song.findByIdAndDelete(songId);
+
+        if (!deletedSong) {
+            return res.status(404).json({ message: "Song not found" });
+        }
+
+        res.status(200).json(successMsg(deletedSong));
+    } catch (error) {
+        console.error(`DELETE SONG ERROR: ${error}`);
+        res.status(500).json(errorMsg(error));
+    }
+};
