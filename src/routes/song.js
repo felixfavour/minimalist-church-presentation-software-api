@@ -1,9 +1,9 @@
 import express from "express";
 
-import { getSongs } from "../controllers/song.js";
+import { searchSongs } from "../controllers/song.js";
 
 const router = express.Router();
 
-router.get("/", getSongs);
+router.get("/", searchSongs);
 
 export default router;

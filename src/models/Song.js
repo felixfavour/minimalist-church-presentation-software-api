@@ -30,6 +30,10 @@ const SongSchema = mongoose.Schema(
             type: Boolean,
             default: false,
         },
+        churchId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Church",
+        },
         createdBy: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",
