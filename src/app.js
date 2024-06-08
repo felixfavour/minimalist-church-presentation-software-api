@@ -26,9 +26,9 @@ app.use(urlencoded({ extended: true }));
 
 app.use("/api/v1/auth", auth);
 
-app.use("/api/v1/church", protect, church);
+app.use("/api/v1/church", church);
 
-app.use("/api/v1/song", protect, song);
+app.use("/api/v1/song", song);
 
 app.use("/api/v1/slide", protect, slide);
 
