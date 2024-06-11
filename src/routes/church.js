@@ -1,14 +1,20 @@
 import express from "express";
 import { createChurch, getChurch } from "../controllers/church.js";
 import {
-    batchDeleteSlides,
-    batchCreateSlides,
-    createSlide,
-    deleteSlide,
-    getSlidesByChurch,
-    updateSlide,
+  batchCreateSlides,
+  batchDeleteSlides,
+  batchUpdateSlides,
+  createSlide,
+  deleteSlide,
+  getSlidesByChurch,
+  updateSlide,
 } from "../controllers/slide.js";
-import { addSong, getSongsByChurch, updateSong, deleteSong } from "../controllers/song.js";
+import {
+  addSong,
+  deleteSong,
+  getSongsByChurch,
+  updateSong,
+} from "../controllers/song.js";
 
 const router = express.Router();
 
@@ -25,6 +31,8 @@ router.post("/:churchId/songs", addSong);
 router.get("/:churchId/slides", getSlidesByChurch);
 
 router.get("/:churchId/songs", getSongsByChurch);
+
+router.put("/:churchId/slides/batch", batchUpdateSlides);
 
 router.put("/:churchId/slides/:slideId", updateSlide);
 
