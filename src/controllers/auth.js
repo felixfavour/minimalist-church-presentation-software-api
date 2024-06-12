@@ -22,11 +22,27 @@ export const signup = async (req, res) => {
   }
 };
 
+export const signupTeammate = async(req, res) => {
+  try{
+    const {fullname, email, password, churchId} = req.body;
+    const hashedPassword = await bcrypt.hash(password, 12);
+    const newUser = await User.create({
+      fullname,
+      email,
+      password: hashedPassword,
+      churchId
+    });
+    const token = signToken(newUser._id);
+    res.status(201).json({ token, data: { newUser } });
+  } catch (error) {
+    res.status(500).json({ message: "Error signing up new team mate", error: error.message });
+  }
+};
+
 export const login = async (req, res) => {
-  const { email, password } = req.body;
   try {
+    const { email, password } = req.body;
     const user = await User.findOne({ email }).select("+password");
-    console.log("id", user?._id.toString());
     await User.findByIdAndUpdate(user?._id.toString(), {
       lastLogin: (new Date()).toISOString(),
     });
