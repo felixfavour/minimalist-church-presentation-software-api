@@ -81,13 +81,13 @@ export const batchCreateSlides = async (req, res) => {
       validate: true,
     });
 
-    // res.status(201).json(createdSlides);
-    res.status(201).json(
-      successMsg({
-        data: `${createdSlides?.filter((slide) => !!slide)
-          ?.length} slides created`,
-      }),
-    );
+    res.status(201).json(createdSlides);
+    // res.status(201).json(
+    //   successMsg({
+    //     data: `${createdSlides?.filter((slide) => !!slide)
+    //       ?.length} slides created`,
+    //   }),
+    // );
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
