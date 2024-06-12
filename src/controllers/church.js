@@ -32,21 +32,23 @@ export const createChurch = async (req, res) => {
 export const getChurch = async (req, res) => {
     try {
         const { churchId } = req.params;
+        const { teammates } = req.query;
 
         const church = await Church.findById(churchId);
         if (!church) {
             return res.status(404).json({ message: "Church not found" });
         }
 
-        const users = await User.find({ churchId: churchId }, 'fullname');
+        const churchData = church.toObject();
 
-        const churchWithUsers = {
-            ...church.toObject(),
-            users
-        };
+        if (teammates === "true") {
+            const users = await User.find({ churchId: churchId }, "fullname avatar");
+            churchData.users = users;
+        }
 
-        res.status(200).json(churchWithUsers);
+        res.status(200).json(churchData);
     } catch (error) {
+        console.error(error);
         res.status(500).json({
             message: "Error fetching church",
             error: error.message,
