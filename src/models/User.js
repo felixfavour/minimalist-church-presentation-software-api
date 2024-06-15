@@ -17,6 +17,9 @@ const userSchema = mongoose.Schema(
             type: String,
             required: true,
         },
+        avatar: {
+            type: String,
+        },
         churchId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Church",
@@ -25,6 +28,10 @@ const userSchema = mongoose.Schema(
             type: String,
             enum: Object.values(Role),
             default: Role.USER,
+        },
+        lastLogin: {
+            type: String,
+            default: new Date(),
         },
     },
     { timestamps: true },

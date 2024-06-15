@@ -7,38 +7,44 @@ export const searchSongs = async (req, res) => {
   try {
     let songs = [];
     const churchId = req.query.churchId;
+    const search = req.query.search;
+    const limit = parseInt(req.query.limit || 10);
+    const page = parseInt(req.query.page, 10) || 1;
+    const skip = (page - 1) * limit;
 
-    if (req.query.search) {
-      songs = await Song.aggregate([
-        {
-          $match: {
-            $and: [
-              { $text: { $search: req.query.search } },
-              {
-                $or: [{ isPublic: { $ne: false } }, { churchId }],
-              },
-            ],
-          },
-        },
-        {
-          $sort: { score: { $meta: "textScore" } },
-        },
-        {
-          $limit: 20,
-        },
-      ]);
-      res.json(successMsg(songs));
-    } else {
-      songs = await Song.aggregate([
-        {
-          $match: {
-            $or: [{ isPublic: { $ne: false } }, { churchId }],
-          },
-        },
-        { $sample: { size: 15 } },
-      ]);
-      res.json(successMsg(songs));
+    const matchQuery = {
+      $or: [{ isPublic: { $ne: false } }, { churchId }],
+    };
+
+    if (search) {
+      matchQuery.$and = [{ $text: { $search: search } }];
     }
+
+    const totalItems = await Song.countDocuments(matchQuery);
+    const totalPages = Math.ceil(totalItems / limit);
+
+    const aggregationPipeline = [
+      { $match: matchQuery },
+      search
+        ? { $sort: { score: { $meta: "textScore" } } }
+        : { $sample: { size: limit } },
+      { $skip: skip },
+      { $limit: limit },
+    ];
+
+    songs = await Song.aggregate(aggregationPipeline);
+
+    const paginationResult = {
+      page,
+      next: page < totalPages ? page + 1 : null,
+      prev: page > 1 ? page - 1 : null,
+      per_page: limit,
+      total_pages: totalPages,
+      total_items: totalItems,
+      data: songs,
+    };
+
+    res.json(successMsg(paginationResult));
   } catch (err) {
     console.error(`GET SONG ERROR: ${err}`);
     res.status(400).json(errorMsg(err));

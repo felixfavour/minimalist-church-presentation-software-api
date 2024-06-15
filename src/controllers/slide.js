@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { Slide } from "../models/Slide.js";
+import { errorMsg, successMsg } from "../helpers/functions.js";
 import { Church } from "../models/Church.js";
 
 export const getSlidesByChurch = async (req, res) => {
@@ -9,24 +10,24 @@ export const getSlidesByChurch = async (req, res) => {
 
         res.status(200).json(slides);
     } catch (error) {
-        res.status(500).json({ message: "Error fetching slides", error: error.message });
+        res.status(500).json({
+            message: "Error fetching slides",
+            error: error.message,
+        });
     }
 };
 
 export const createSlide = async (req, res) => {
     try {
-        const { churchId } = req.params;
         const { name, type, layout } = req.body;
-        const newSlide = await Slide.create({
-            churchId,
-            name,
-            type,
-            layout,
-        });
+        const newSlide = await Slide.create(req.body);
 
         res.status(201).json(newSlide);
     } catch (error) {
-        res.status(500).json({ message: "Error creating slide", error: error.message });
+        res.status(500).json({
+            message: "Error creating slide",
+            error: error.message,
+        });
     }
 };
 
@@ -35,7 +36,13 @@ export const updateSlide = async (req, res) => {
     const slideData = req.body;
 
     try {
-        const updatedSlide = await Slide.findByIdAndUpdate(slideId, { $set: slideData }, { new: true });
+        const updatedSlide = await Slide.findByIdAndUpdate(
+            slideId,
+            {
+                $set: slideData,
+            },
+            { new: true },
+        );
 
         if (!updatedSlide) {
             return res.status(404).send("Slide not found");
@@ -43,7 +50,10 @@ export const updateSlide = async (req, res) => {
 
         res.status(200).json(updatedSlide);
     } catch (error) {
-        res.status(500).json({ message: "Failed to update slide", error: error.message });
+        res.status(500).json({
+            message: "Failed to update slide",
+            error: error.message,
+        });
     }
 };
 
@@ -56,26 +66,62 @@ export const deleteSlide = async (req, res) => {
         }
         res.status(200).json({ message: "Slide successfully deleted" });
     } catch (error) {
-        res.status(500).json({ message: "Error deleting slide", error: error.message });
+        res.status(500).json({
+            message: "Error deleting slide",
+            error: error.message,
+        });
     }
 };
 
 export const batchCreateSlides = async (req, res) => {
     try {
-        const { churchId } = req.params;
         const slidesData = req.body;
 
         if (!Array.isArray(slidesData) || slidesData.length === 0) {
-            return res.status(400).send("Invalid data provided.");
+            return res.status(400).json(errorMsg("Invalid data provided"));
         }
 
-        const slidesWithChurchId = slidesData.map(data => ({ ...data, churchId }));
-
-        const createdSlides = await Slide.insertMany(slidesWithChurchId, { validate: true });
+        const createdSlides = await Slide.insertMany(slidesData, {
+            validate: true,
+        });
 
         res.status(201).json(createdSlides);
+        // res.status(201).json(
+        //   successMsg({
+        //     data: `${createdSlides?.filter((slide) => !!slide)
+        //       ?.length} slides created`,
+        //   }),
+        // );
     } catch (error) {
         res.status(500).json({ error: error.message });
+    }
+};
+
+export const batchUpdateSlides = async (req, res) => {
+    const updatedSlidesData = req.body;
+
+    try {
+        if (!Array.isArray(req.body) || req.body?.length === 0) {
+            return res.status(400).json(errorMsg("Invalid data provided"));
+        }
+
+        const updatePromises = [];
+        updatedSlidesData.forEach(slide => {
+            updatePromises.push(Slide.findByIdAndUpdate(slide?._id, { $set: slide }, { new: true }));
+        });
+        const updatedSlides = await Promise.all(updatePromises);
+
+        // res.status(200).json(updatedSlides);
+        res.status(200).json(
+            successMsg({
+                data: `${updatedSlides?.filter(slide => !!slide)?.length} slides updated`,
+            }),
+        );
+    } catch (error) {
+        res.status(500).json({
+            message: "Failed to batch update slide",
+            error: error.message,
+        });
     }
 };
 
