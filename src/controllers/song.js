@@ -67,10 +67,12 @@ export const getSongsByChurch = async (req, res) => {
 
 export const addSong = async (req, res) => {
   try {
-    const userId = req.user._id;
-    const { churchId } = req.params;
+    // console.log(req);
+    // const userId = req.user._id;
+    // const { churchId } = req.params;
 
-    const { id, title, artist, lyrics, isPublic } = req.body;
+    const { id, title, artist, lyrics, isPublic, createdBy, churchId } =
+      req.body;
     const newSong = await Song.create({
       id,
       title,
@@ -78,7 +80,7 @@ export const addSong = async (req, res) => {
       lyrics,
       isPublic,
       churchId,
-      createdBy: userId,
+      createdBy,
     });
     res.status(201).json(newSong);
   } catch (error) {
