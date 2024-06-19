@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Socket.IO Test</title>
+    </head>
+    <body>
+        <h1>Socket.IO Client</h1>
+        <input type="text" id="userIdInput" placeholder="Enter your user ID" />
+        <button id="joinChurchButton">Join Church</button>
+
+        <h2>Create New Slide</h2>
+        <form id="slideForm">
+            <input type="text" id="slideName" placeholder="Slide Name" required />
+            <input type="text" id="slideType" placeholder="Slide Type" required />
+            <input type="text" id="slideLayout" placeholder="Slide Layout" required />
+            <input type="text" id="churchId" placeholder="Church ID" required />
+            <input type="text" id="userId" placeholder="User ID" required />
+            <textarea id="contents" placeholder="Contents (comma-separated)" required></textarea>
+            <button type="submit">Create Slide</button>
+        </form>
+
+        <h2>Messages</h2>
+        <input type="text" id="messageInput" placeholder="Enter your message" />
+        <button id="sendMessageButton">Send Message</button>
+        <ul id="messages"></ul>
+
+        <!-- Include the Socket.IO client library -->
+        <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+
+        <script>
+            const socket = io("http://localhost:4500");
+
+            socket.on("connect", () => {
+                console.log("connected to server");
+                // Automatically join church room if user info is stored
+                const userId = localStorage.getItem("userId");
+                if (userId) {
+                    socket.emit("joinChurch", userId);
+                }
+            });
+
+            socket.on("message", message => {
+                console.log("message from server:", message);
+                const messagesList = document.getElementById("messages");
+                const newMessage = document.createElement("li");
+                newMessage.textContent = message;
+                messagesList.appendChild(newMessage);
+            });
+
+            socket.on("disconnect", reason => {
+                console.log("disconnected from server:", reason);
+            });
+
+            socket.on("error", err => {
+                console.error("Socket error:", err);
+            });
+
+            // Listen for new slides
+            socket.on("newSlide", slide => {
+                console.log("New slide created:", slide);
+                // Update the UI with the new slide
+                const messagesList = document.getElementById("messages");
+                const newSlide = document.createElement("li");
+                newSlide.textContent = `New Slide: ${slide.name}`;
+                messagesList.appendChild(newSlide);
+            });
+
+            // Store user info and join church room when button is clicked
+            document.getElementById("joinChurchButton").addEventListener("click", () => {
+                const userId = document.getElementById("userIdInput").value;
+                localStorage.setItem("userId", userId);
+                socket.emit("joinChurch", userId);
+            });
+
+            // Send message when button is pressed
+            document.getElementById("sendMessageButton").addEventListener("click", () => {
+                const message = document.getElementById("messageInput").value;
+                socket.emit("message", message);
+                document.getElementById("messageInput").value = "";
+            });
+
+            // Handle slide creation form submission
+            document.getElementById("slideForm").addEventListener("submit", async event => {
+                event.preventDefault();
+                const name = document.getElementById("slideName").value;
+                const type = document.getElementById("slideType").value;
+                const layout = document.getElementById("slideLayout").value;
+                const churchId = document.getElementById("churchId").value;
+                const userId = document.getElementById("userId").value;
+                const contents = document
+                    .getElementById("contents")
+                    .value.split(",")
+                    .map(item => item.trim());
+
+                const slideData = {
+                    name,
+                    type,
+                    layout,
+                    churchId,
+                    userId,
+                    contents,
+                };
+
+                try {
+                    const response = await fetch(`http://localhost:4500/api/v1/church/${churchId}/slides`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${localStorage.getItem("token")}`,
+                        },
+                        body: JSON.stringify(slideData),
+                    });
+
+                    if (response.ok) {
+                        const newSlide = await response.json();
+                        console.log("New slide created:", newSlide);
+                        // The new slide will be broadcasted to the appropriate room
+                    } else {
+                        console.error("Failed to create slide:", response.statusText);
+                    }
+                } catch (error) {
+                    console.error("Error creating slide:", error);
+                }
+            });
+        </script>
+    </body>
+</html>

@@ -19,11 +19,14 @@ export const getSlidesByChurch = async (req, res) => {
 
 export const createSlide = async (req, res) => {
     try {
-        const { name, type, layout } = req.body;
         const newSlide = await Slide.create(req.body);
+
+        // Emit event to all connected clients related to the same church
+        req.io.to(`church_${req.body.churchId}`).emit("newSlide", newSlide);
 
         res.status(201).json(newSlide);
     } catch (error) {
+        console.log(error);
         res.status(500).json({
             message: "Error creating slide",
             error: error.message,
