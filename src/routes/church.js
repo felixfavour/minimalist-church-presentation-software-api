@@ -12,6 +12,7 @@ import {
 import {
   addSong,
   deleteSong,
+  getSong,
   getSongsByChurch,
   updateSong,
 } from "../controllers/song.js";
@@ -35,6 +36,8 @@ router.get("/:churchId/songs", getSongsByChurch);
 router.put("/:churchId/slides/batch", batchUpdateSlides);
 
 router.put("/:churchId/slides/:slideId", updateSlide);
+
+router.get("/:churchId/song/:songId", getSong);
 
 router.put("/:churchId/songs/:songId", updateSong);
 
