@@ -91,6 +91,27 @@ export const addSong = async (req, res) => {
   }
 };
 
+export const getSong = async (req, res) => {
+  const { songId } = req.params;
+
+  try {
+    const song = await Song.findById(
+      songId,
+    );
+
+    if (!song) {
+      return res.status(404).json({ message: "Song not found" });
+    }
+
+    res.status(200).json(song);
+  } catch (error) {
+    res.status(500).json({
+      message: "Failed to retrieve song",
+      error: error.message,
+    });
+  }
+};
+
 export const updateSong = async (req, res) => {
   const { songId } = req.params;
   const songData = req.body;

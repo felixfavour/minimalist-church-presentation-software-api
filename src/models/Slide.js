@@ -23,6 +23,11 @@ const slideSchema = new mongoose.Schema({
     ref: "User",
     required: true,
   },
+  // [id] is offline means of identification, when backend connection is not yet initiated.
+  id: {
+    type: String,
+    required: true,
+  },
   name: {
     type: String,
     required: true,
