@@ -1,27 +1,23 @@
 import express from "express";
-import { createChurch, getChurch } from "../controllers/church.js";
+import { createChurch, getChurch, sendEmailInvite } from "../controllers/church.js";
 import {
-  batchCreateSlides,
-  batchDeleteSlides,
-  batchUpdateSlides,
-  createSlide,
-  deleteSlide,
-  getSlidesByChurch,
-  updateSlide,
+    batchCreateSlides,
+    batchDeleteSlides,
+    batchUpdateSlides,
+    createSlide,
+    deleteSlide,
+    getSlidesByChurch,
+    updateSlide,
 } from "../controllers/slide.js";
-import {
-  addSong,
-  deleteSong,
-  getSong,
-  getSongsByChurch,
-  updateSong,
-} from "../controllers/song.js";
+import { addSong, deleteSong, getSong, getSongsByChurch, updateSong } from "../controllers/song.js";
 
 const router = express.Router();
 
 router.post("/", createChurch);
 
 router.get("/:churchId", getChurch);
+
+router.post("/:churchId/emailInvite", sendEmailInvite);
 
 router.post("/:churchId/slides", createSlide);
 
