@@ -44,7 +44,7 @@ const SongSchema = mongoose.Schema(
 
 SongSchema.index(
     { title: "text", artist: "text", lyrics: "text" },
-    { weights: { title: 7, artist: 3, lyrics: 1 }, default_language: "none" },
+    { weights: { title: 5, artist: 4, lyrics: 3 }, default_language: "none" },
 );
 
 export const Song = mongoose.model("song", SongSchema);
