@@ -13,6 +13,9 @@ export const connectDB = async () => {
             `${process.env.DB_HOST}://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_CONNECTOR}`,
         );
 
+        // Drop existing indexes
+        await Song.collection.dropIndexes();
+
         Song.createIndexes()
             .then(() => console.log("Indexes ensured"))
             .catch(err => console.error("Error creating indexes:", err));
