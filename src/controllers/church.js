@@ -7,7 +7,7 @@ import sendgridMail from "@sendgrid/mail";
 export const createChurch = async (req, res) => {
   try {
     const { name, type, address, email, pastor } = req.body;
-    const userId = req.user._id;
+    const userId = req.user?._id || req.body.userId;
 
     const newChurch = await Church.create({
       name,

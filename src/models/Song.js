@@ -42,6 +42,9 @@ const SongSchema = mongoose.Schema(
     { timestamps: true },
 );
 
-SongSchema.index({ title: "text", lyrics: "text", album: "text", artist: "text" });
+SongSchema.index(
+    { title: "text", artist: "text", lyrics: "text" },
+    { weights: { title: 5, artist: 4, lyrics: 3 }, default_language: "none" },
+);
 
 export const Song = mongoose.model("song", SongSchema);
