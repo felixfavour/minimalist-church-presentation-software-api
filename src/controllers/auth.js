@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
 import { User } from "../models/User.js";
+import { color } from "../helpers/functions.js";
 
 const signToken = id => jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "60d" });
 
@@ -13,6 +14,7 @@ export const signup = async (req, res) => {
             fullname,
             email,
             password: hashedPassword,
+            theme: color(),
         });
         const token = signToken(newUser._id);
         res.status(201).json({ token, data: { newUser } });
@@ -30,6 +32,7 @@ export const signupTeammate = async (req, res) => {
             email,
             password: hashedPassword,
             churchId,
+            theme: color(),
         });
         const token = signToken(newUser._id);
         res.status(201).json({ token, data: { newUser } });

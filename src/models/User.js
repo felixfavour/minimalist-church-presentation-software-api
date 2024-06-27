@@ -20,6 +20,9 @@ const userSchema = mongoose.Schema(
         avatar: {
             type: String,
         },
+        theme: {
+            type: String,
+        },
         churchId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Church",
