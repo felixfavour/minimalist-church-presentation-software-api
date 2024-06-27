@@ -9,6 +9,8 @@ const router = express.Router({ mergeParams: true });
 router.post("/", createSchedule);
 router.get("/", getSchedulesByChurch);
 router.delete("/:scheduleId", deleteSchedule);
+
+// nested routes
 router.use("/:scheduleId/slides", slidesRouter);
 
 export default router;

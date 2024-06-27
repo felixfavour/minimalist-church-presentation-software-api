@@ -1,7 +1,7 @@
 import { errorMsg, successMsg } from "../helpers/functions.js";
 import { Song } from "../models/Song.js";
 
-export const getSongs = async (req, res) => {
+export const searchSongs = async (req, res) => {
     try {
         let songs = [];
         const churchId = req.query.churchId;
