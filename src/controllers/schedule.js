@@ -27,6 +27,31 @@ export const getSchedulesByChurch = async (req, res) => {
     }
 };
 
+export const updateSchedule = async(req, res) => {
+    try {
+        const { scheduleId } = req.params;
+        const scheduleData = req.body;
+
+        const updatedSchedule = await Schedule.findByIdAndUpdate(
+            scheduleId,
+            {
+                $set: scheduleData,
+            },
+            {new: true}
+        );
+
+        if (!updatedSchedule) {
+            return res.status(200).json(updateSchedule);
+        }
+
+    } catch (error) {
+        res.status(500).json({
+            message: "Error updating schedule",
+            error: error.message,
+        })
+    }
+}
+
 export const deleteSchedule = async (req, res) => {
     try {
         const { scheduleId } = req.params;
