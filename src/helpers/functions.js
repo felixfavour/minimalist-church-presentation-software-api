@@ -31,7 +31,7 @@ export const color = () => {
         "#FF00CC",
         "#FF00CC",
     ];
-    const index = Math.round(Math.random() * colors.length);
+    const index = Math.floor(Math.random() * colors.length);
     const returnable = colors[index];
     if (mostRecentColour === returnable) {
         return color();

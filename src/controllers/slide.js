@@ -1,12 +1,10 @@
-import mongoose from "mongoose";
 import { Slide } from "../models/Slide.js";
 import { errorMsg, successMsg } from "../helpers/functions.js";
-import { Church } from "../models/Church.js";
 
-export const getSlidesByChurch = async (req, res) => {
+export const getSlidesBySchedule = async (req, res) => {
   try {
-    const { churchId } = req.params;
-    const slides = await Slide.find({ churchId });
+    const { scheduleId } = req.params;
+    const slides = await Slide.find({ scheduleId });
 
     res.status(200).json(slides);
   } catch (error) {
@@ -19,7 +17,6 @@ export const getSlidesByChurch = async (req, res) => {
 
 export const createSlide = async (req, res) => {
   try {
-    const { name, type, layout } = req.body;
     const newSlide = await Slide.create(req.body);
 
     res.status(201).json(newSlide);
@@ -76,6 +73,7 @@ export const deleteSlide = async (req, res) => {
 export const batchCreateSlides = async (req, res) => {
   try {
     const slidesData = req.body;
+    console.log(req.params.scheduleId);
 
     if (!Array.isArray(slidesData) || slidesData.length === 0) {
       return res.status(400).json(errorMsg("Invalid data provided"));

@@ -44,7 +44,10 @@ export const getChurch = async (req, res) => {
     const churchData = church.toObject();
 
     if (teammates === "true") {
-      const users = await User.find({ churchId: churchId }, "fullname avatar");
+      const users = await User.find(
+        { churchId: churchId },
+        "fullname avatar theme",
+      );
       churchData.users = users;
     }
 
