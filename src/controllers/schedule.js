@@ -27,7 +27,7 @@ export const getSchedulesByChurch = async (req, res) => {
     }
 };
 
-export const updateSchedule = async(req, res) => {
+export const updateSchedule = async (req, res) => {
     try {
         const { scheduleId } = req.params;
         const scheduleData = req.body;
@@ -37,20 +37,19 @@ export const updateSchedule = async(req, res) => {
             {
                 $set: scheduleData,
             },
-            {new: true}
+            { new: true },
         );
 
         if (!updatedSchedule) {
             return res.status(200).json(updateSchedule);
         }
-
     } catch (error) {
         res.status(500).json({
             message: "Error updating schedule",
             error: error.message,
-        })
+        });
     }
-}
+};
 
 export const deleteSchedule = async (req, res) => {
     try {
@@ -66,4 +65,17 @@ export const deleteSchedule = async (req, res) => {
             error: error.message,
         });
     }
+};
+
+// WebSocket Handlers
+export const handleScheduleSocket = (io, socket) => {
+    socket.on("join_schedule", scheduleId => {
+        socket.join(scheduleId);
+        console.log(`User joined schedule ${scheduleId}`);
+    });
+
+    socket.on("leave_schedule", scheduleId => {
+        socket.leave(scheduleId);
+        console.log(`User left schedule ${scheduleId}`);
+    });
 };
