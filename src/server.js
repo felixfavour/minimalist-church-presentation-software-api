@@ -16,6 +16,6 @@ app.use((req, res, next) => {
     next();
 });
 
-app.listen(port, () => {
+server.listen(port, () => {
     console.log(`Server is listening on port ${port}`);
 });
