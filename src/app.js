@@ -8,7 +8,6 @@ import { protect } from "./middlewares/auth.js";
 import auth from "./routes/auth.js";
 import church from "./routes/church.js";
 import song from "./routes/song.js";
-import slide from "./routes/slide.js";
 
 const app = express();
 
@@ -26,7 +25,7 @@ app.use(urlencoded({ extended: true }));
 
 app.use("/api/v1/auth", auth);
 
-app.use("/api/v1/church", protect, church);
+app.use("/api/v1/church", church);
 
 app.use("/api/v1/song", protect, song);
 

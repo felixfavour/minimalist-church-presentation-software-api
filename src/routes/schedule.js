@@ -1,6 +1,11 @@
 import express from "express";
 
-import { createSchedule, deleteSchedule, getSchedulesByChurch, updateSchedule } from "../controllers/schedule.js";
+import {
+  createSchedule,
+  deleteSchedule,
+  getSchedulesByChurch,
+  updateSchedule,
+} from "../controllers/schedule.js";
 
 import slidesRouter from "./slide.js";
 

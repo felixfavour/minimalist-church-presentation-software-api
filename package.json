@@ -34,6 +34,7 @@
         "nanoid": "^4.0.0",
         "node-schedule": "^2.1.1",
         "nodemon": "^2.0.15",
+        "socket.io": "^4.7.5",
         "validatorjs": "^3.22.1"
     },
     "devDependencies": {
